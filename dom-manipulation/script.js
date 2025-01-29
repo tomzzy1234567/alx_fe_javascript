@@ -113,7 +113,6 @@ let quotes = [];
 
 let categories = [];
 
-
 function loadQuotes() {
   const storedQuotes = localStorage.getItem("quotes");
   if (storedQuotes) {
@@ -122,17 +121,14 @@ function loadQuotes() {
 }
 
 function saveQuotes() {
-
   localStorage.setItem("quotes", JSON.stringify(quotes));
 }
-
 
 function addQuote(newQuote) {
   quotes.push(newQuote);
   saveQuotes();
   updateCategories(newQuote.category);
 }
-
 
 function updateCategories(category) {
   if (!categories.includes(category)) {
@@ -144,6 +140,7 @@ function updateCategories(category) {
     categoryFilter.appendChild(option);
   }
 }
+
 
 function populateCategories() {
   const categoryFilter = document.getElementById("categoryFilter");
@@ -168,15 +165,16 @@ function filterQuotes() {
     });
   } else {
     quoteDisplay.innerHTML = "";
-    quotes.forEach((quote) => {
-      if (quote.category === selectedCategory) {
+    quotes
+      .filter((quote) => quote.category === selectedCategory)
+      .map((quote) => {
         const p = document.createElement("p");
         p.textContent = quote.text;
         quoteDisplay.appendChild(p);
-      }
-    });
+      });
   }
 }
+
 
 loadQuotes();
 populateCategories();
