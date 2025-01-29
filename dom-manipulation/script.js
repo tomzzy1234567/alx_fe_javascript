@@ -53,12 +53,14 @@ function addQuote() {
 
 let quotes = [];
 
+
 function loadQuotes() {
   const storedQuotes = localStorage.getItem("quotes");
   if (storedQuotes) {
     quotes = JSON.parse(storedQuotes);
   }
 }
+
 
 function saveQuotes() {
   localStorage.setItem("quotes", JSON.stringify(quotes));
@@ -68,6 +70,7 @@ function addQuote(newQuote) {
   quotes.push(newQuote);
   saveQuotes();
 }
+
 
 function exportToJsonFile() {
   const jsonQuotes = JSON.stringify(quotes);
@@ -79,6 +82,7 @@ function exportToJsonFile() {
   a.click();
 }
 
+
 function importFromJsonFile(event) {
   const fileReader = new FileReader();
   fileReader.onload = function(event) {
@@ -88,7 +92,6 @@ function importFromJsonFile(event) {
     alert("Quotes imported successfully!");
   };
   fileReader.readAsText(event.target.files[0]);
-}
 
 loadQuotes();
 
@@ -101,10 +104,5 @@ document.getElementById("addQuoteButton").addEventListener("click", function() {
 
 document.getElementById("exportToJsonFileButton").addEventListener("click", exportToJsonFile);
 
-document.getElementById("importFile").addEventListener("change", importFromJsonFile)
+document.getElementById("importFile").addEventListener("change", importFromJsonFile);
 
-
-document.getElementById("newQuote").addEventListener("click", showRandomQuote);
-
-document.getElementById("addQuoteButton").addEventListener("click", createAddQuoteForm);
-showRandomQuote();
