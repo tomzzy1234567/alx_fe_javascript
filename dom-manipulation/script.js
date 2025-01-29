@@ -215,7 +215,6 @@ document.getElementById("importFile").addEventListener("change", function(event)
 
 
   
-
 let quotes = [];
 
 // Array of unique categories
@@ -308,6 +307,16 @@ async function fetchQuotesFromServer() {
   }
 }
 
+// Sync quotes with server
+async function syncQuotes() {
+  try {
+    await fetchQuotesFromServer();
+    console.log("Quotes synced with server");
+  } catch (error) {
+    console.error("Error syncing quotes:", error);
+  }
+}
+
 // Simulate server interaction by posting data periodically
 async function postServerData() {
   try {
@@ -329,7 +338,7 @@ async function postServerData() {
 
 // Periodically fetch and post data to simulate server interaction
 setInterval(async () => {
-  await fetchQuotesFromServer();
+  await syncQuotes();
   await postServerData();
 }, 10000); // 10 seconds
 
@@ -357,19 +366,7 @@ document.getElementById("exportToJsonFileButton").addEventListener("click", func
 });
 
 // Event listener for the "Import from JSON" file input
-document.getElementById("importFile").addEventListener("change", function(event) {
-  const fileReader = new FileReader();
-  fileReader.onload = function(event) {
-    const importedQuotes = JSON.parse(event.target.result);
-    quotes.push(...importedQuotes);
-    saveQuotes();
-    populateCategories();
-    alert("Quotes imported successfully!");
-  };
-  fileReader.readAsText(event.target.files[0]);
-});
-
-
+document.getElementById("importFile").addEventListener("change", function
 
 
 
