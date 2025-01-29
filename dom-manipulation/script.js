@@ -302,6 +302,7 @@ async function fetchQuotesFromServer() {
     }));
     saveQuotes();
     populateCategories();
+    alert("Quotes synced with server!");
   } catch (error) {
     console.error("Error fetching quotes from server:", error);
   }
@@ -311,7 +312,7 @@ async function fetchQuotesFromServer() {
 async function syncQuotes() {
   try {
     await fetchQuotesFromServer();
-    console.log("Quotes synced with server");
+    console.log("Quotes synced with server!");
   } catch (error) {
     console.error("Error syncing quotes:", error);
   }
@@ -366,7 +367,15 @@ document.getElementById("exportToJsonFileButton").addEventListener("click", func
 });
 
 // Event listener for the "Import from JSON" file input
-document.getElementById("importFile").addEventListener("change", function
-
+document.getElementById("importFile").addEventListener("change", function(event) {
+  const fileReader = new FileReader();
+  fileReader.onload = function(event) {
+    const importedQuotes = JSON.parse(event.target.result);
+    quotes.push(...importedQuotes);
+    saveQuotes();
+    populateCategories();
+    alert("Quotes imported successfully!");
+  };
+  fileReader
 
 
