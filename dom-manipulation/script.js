@@ -214,9 +214,8 @@ document.getElementById("importFile").addEventListener("change", function(event)
 
 
 
+  
 
-
-  let quotes = [];
 
 let categories = [];
 
@@ -241,7 +240,6 @@ function addQuote(newQuote) {
   updateCategories(newQuote.category);
 }
 
-
 function updateCategories(category) {
   if (!categories.includes(category)) {
     categories.push(category);
@@ -253,6 +251,7 @@ function updateCategories(category) {
   }
 }
 
+// Populate categories dropdown menu
 function populateCategories() {
   const categoryFilter = document.getElementById("categoryFilter");
   categories.forEach((category) => {
@@ -262,7 +261,6 @@ function populateCategories() {
     categoryFilter.appendChild(option);
   });
 }
-
 
 function filterQuotes() {
   const categoryFilter = document.getElementById("categoryFilter");
@@ -287,11 +285,11 @@ function filterQuotes() {
   }
 }
 
-function fetchServerData() {
+r
+function fetchQuotesFromServer() {
   fetch(serverUrl)
     .then((response) => response.json())
     .then((data) => {
-      
       quotes = data.map((quote) => ({
         text: quote.title,
         category: quote.userId.toString(),
@@ -299,9 +297,8 @@ function fetchServerData() {
       saveQuotes();
       populateCategories();
     })
-    .catch((error) => console.error("Error fetching server data:", error));
+    .catch((error) => console.error("Error fetching quotes from server:", error));
 }
-
 
 function postServerData() {
   const newQuote = {
@@ -320,9 +317,10 @@ function postServerData() {
 
 
 setInterval(() => {
-  fetchServerData();
+  fetchQuotesFromServer();
   postServerData();
 }, 10000); // 10 seconds
+
 
 loadQuotes();
 populateCategories();
@@ -334,7 +332,6 @@ document.getElementById("addQuoteButton").addEventListener("click", function() {
   const newQuote = { text: newQuoteText, category: newQuoteCategory };
   addQuote(newQuote);
 });
-
 
 document.getElementById("exportToJsonFileButton").addEventListener("click", function() {
   const jsonQuotes = JSON.stringify(quotes);
@@ -358,4 +355,7 @@ document.getElementById("importFile").addEventListener("change", function(event)
   };
   fileReader.readAsText(event.target.files[0]);
 });
+
+
+
 
