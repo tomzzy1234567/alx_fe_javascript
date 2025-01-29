@@ -216,12 +216,15 @@ document.getElementById("importFile").addEventListener("change", function(event)
 
   
 
+let quotes = [];
 
+// Array of unique categories
 let categories = [];
 
+// Simulated server URL
 const serverUrl = "https://jsonplaceholder.typicode.com/posts";
 
-
+// Load quotes from local storage
 function loadQuotes() {
   const storedQuotes = localStorage.getItem("quotes");
   if (storedQuotes) {
@@ -229,17 +232,19 @@ function loadQuotes() {
   }
 }
 
-
+// Save quotes to local storage
 function saveQuotes() {
   localStorage.setItem("quotes", JSON.stringify(quotes));
 }
 
+// Add quote to quotes array and save to local storage
 function addQuote(newQuote) {
   quotes.push(newQuote);
   saveQuotes();
   updateCategories(newQuote.category);
 }
 
+// Update categories array and dropdown menu
 function updateCategories(category) {
   if (!categories.includes(category)) {
     categories.push(category);
@@ -262,6 +267,7 @@ function populateCategories() {
   });
 }
 
+// Filter quotes based on selected category
 function filterQuotes() {
   const categoryFilter = document.getElementById("categoryFilter");
   const selectedCategory = categoryFilter.value;
@@ -285,47 +291,53 @@ function filterQuotes() {
   }
 }
 
-r
-function fetchQuotesFromServer() {
-  fetch(serverUrl)
-    .then((response) => response.json())
-    .then((data) => {
-      quotes = data.map((quote) => ({
-        text: quote.title,
-        category: quote.userId.toString(),
-      }));
-      saveQuotes();
-      populateCategories();
-    })
-    .catch((error) => console.error("Error fetching quotes from server:", error));
+// Fetch quotes from server
+async function fetchQuotesFromServer() {
+  try {
+    const response = await fetch(serverUrl);
+    const data = await response.json();
+    // Update local quotes array with server data
+    quotes = data.map((quote) => ({
+      text: quote.title,
+      category: quote.userId.toString(),
+    }));
+    saveQuotes();
+    populateCategories();
+  } catch (error) {
+    console.error("Error fetching quotes from server:", error);
+  }
 }
 
-function postServerData() {
-  const newQuote = {
-    title: "New quote from client",
-    userId: 1,
-  };
-  fetch(serverUrl, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(newQuote),
-  })
-    .then((response) => response.json())
-    .then((data) => console.log("Server response:", data))
-    .catch((error) => console.error("Error posting server data:", error));
+// Simulate server interaction by posting data periodically
+async function postServerData() {
+  try {
+    const newQuote = {
+      title: "New quote from client",
+      userId: 1,
+    };
+    const response = await fetch(serverUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newQuote),
+    });
+    const data = await response.json();
+    console.log("Server response:", data);
+  } catch (error) {
+    console.error("Error posting server data:", error);
+  }
 }
 
-
-setInterval(() => {
-  fetchQuotesFromServer();
-  postServerData();
+// Periodically fetch and post data to simulate server interaction
+setInterval(async () => {
+  await fetchQuotesFromServer();
+  await postServerData();
 }, 10000); // 10 seconds
 
-
+// Load quotes and categories from local storage when initialized
 loadQuotes();
 populateCategories();
 
-
+// Event listener for the "Add Quote" button
 document.getElementById("addQuoteButton").addEventListener("click", function() {
   const newQuoteText = document.getElementById("newQuoteText").value;
   const newQuoteCategory = document.getElementById("newQuoteCategory").value;
@@ -333,6 +345,7 @@ document.getElementById("addQuoteButton").addEventListener("click", function() {
   addQuote(newQuote);
 });
 
+// Event listener for the "Export Quotes" button
 document.getElementById("exportToJsonFileButton").addEventListener("click", function() {
   const jsonQuotes = JSON.stringify(quotes);
   const blob = new Blob([jsonQuotes], { type: "application/json" });
@@ -343,7 +356,7 @@ document.getElementById("exportToJsonFileButton").addEventListener("click", func
   a.click();
 });
 
-
+// Event listener for the "Import from JSON" file input
 document.getElementById("importFile").addEventListener("change", function(event) {
   const fileReader = new FileReader();
   fileReader.onload = function(event) {
@@ -355,6 +368,7 @@ document.getElementById("importFile").addEventListener("change", function(event)
   };
   fileReader.readAsText(event.target.files[0]);
 });
+
 
 
 
