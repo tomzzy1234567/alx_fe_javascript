@@ -217,13 +217,13 @@ document.getElementById("importFile").addEventListener("change", function(event)
   
 let quotes = [];
 
-// Array of unique categories
+
 let categories = [];
 
-// Simulated server URL
+
 const serverUrl = "https://jsonplaceholder.typicode.com/posts";
 
-// Load quotes from local storage
+
 function loadQuotes() {
   const storedQuotes = localStorage.getItem("quotes");
   if (storedQuotes) {
@@ -231,19 +231,17 @@ function loadQuotes() {
   }
 }
 
-// Save quotes to local storage
 function saveQuotes() {
   localStorage.setItem("quotes", JSON.stringify(quotes));
 }
 
-// Add quote to quotes array and save to local storage
+
 function addQuote(newQuote) {
   quotes.push(newQuote);
   saveQuotes();
   updateCategories(newQuote.category);
 }
 
-// Update categories array and dropdown menu
 function updateCategories(category) {
   if (!categories.includes(category)) {
     categories.push(category);
@@ -255,7 +253,7 @@ function updateCategories(category) {
   }
 }
 
-// Populate categories dropdown menu
+
 function populateCategories() {
   const categoryFilter = document.getElementById("categoryFilter");
   categories.forEach((category) => {
@@ -266,7 +264,6 @@ function populateCategories() {
   });
 }
 
-// Filter quotes based on selected category
 function filterQuotes() {
   const categoryFilter = document.getElementById("categoryFilter");
   const selectedCategory = categoryFilter.value;
@@ -290,12 +287,12 @@ function filterQuotes() {
   }
 }
 
-// Fetch quotes from server
+
 async function fetchQuotesFromServer() {
   try {
     const response = await fetch(serverUrl);
     const data = await response.json();
-    // Update local quotes array with server data
+    
     quotes = data.map((quote) => ({
       text: quote.title,
       category: quote.userId.toString(),
@@ -308,7 +305,7 @@ async function fetchQuotesFromServer() {
   }
 }
 
-// Sync quotes with server
+
 async function syncQuotes() {
   try {
     await fetchQuotesFromServer();
@@ -318,7 +315,6 @@ async function syncQuotes() {
   }
 }
 
-// Simulate server interaction by posting data periodically
 async function postServerData() {
   try {
     const newQuote = {
@@ -337,17 +333,17 @@ async function postServerData() {
   }
 }
 
-// Periodically fetch and post data to simulate server interaction
+
 setInterval(async () => {
   await syncQuotes();
   await postServerData();
 }, 10000); // 10 seconds
 
-// Load quotes and categories from local storage when initialized
+
 loadQuotes();
 populateCategories();
 
-// Event listener for the "Add Quote" button
+
 document.getElementById("addQuoteButton").addEventListener("click", function() {
   const newQuoteText = document.getElementById("newQuoteText").value;
   const newQuoteCategory = document.getElementById("newQuoteCategory").value;
@@ -355,7 +351,6 @@ document.getElementById("addQuoteButton").addEventListener("click", function() {
   addQuote(newQuote);
 });
 
-// Event listener for the "Export Quotes" button
 document.getElementById("exportToJsonFileButton").addEventListener("click", function() {
   const jsonQuotes = JSON.stringify(quotes);
   const blob = new Blob([jsonQuotes], { type: "application/json" });
@@ -366,7 +361,6 @@ document.getElementById("exportToJsonFileButton").addEventListener("click", func
   a.click();
 });
 
-// Event listener for the "Import from JSON" file input
 document.getElementById("importFile").addEventListener("change", function(event) {
   const fileReader = new FileReader();
   fileReader.onload = function(event) {
